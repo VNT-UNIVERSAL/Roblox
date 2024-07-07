@@ -1,0 +1,63 @@
+function searchForObjectWithName(parent, targetName)
+    local foundObjects = {}
+
+    local function recursiveSearch(object)
+        for _, child in pairs(object:GetChildren()) do
+            if child.Name == targetName then
+                table.insert(foundObjects, child)
+            end
+            recursiveSearch(child)
+        end
+    end
+
+    recursiveSearch(parent)
+
+    return foundObjects
+end
+
+function Savetxtconfig(log)
+    local filename = game.Players.LocalPlayer.Name .. ".txt"
+    if writefile then
+        if isfile(filename) then
+            if ValueFileReady == 1 then
+                return
+            end
+            ValueFileReady = 1
+            print('File Ready')
+        else
+            if ValueFileReady == 1 then
+                return
+            end
+            ValueFileReady = 1
+            print('Create File')
+            writefile(filename, log)
+        end
+    end
+end
+
+function CheckContent(moneyLabel)
+    local moneyText = moneyLabel.Text
+    print(moneyText)
+    local money = tonumber(moneyText)
+    return money
+end
+
+local rootFolder = game.Players.LocalPlayer.PlayerGui.HUD
+
+local objectsNamedMoneyLabel = searchForObjectWithName(rootFolder, "MoneyLabel")
+
+while true do
+                if not DaTaoFile then
+    for _, moneyLabel in pairs(objectsNamedMoneyLabel) do
+        if CheckContent(moneyLabel) >= CoinXter then
+            if not DaTaoFile then
+            Savetxtconfig('Yummytool')
+                        DaTaoFile = true
+            end
+        end
+    end
+    end
+    wait(1)
+end
+
+print('Save YummyYummy')
