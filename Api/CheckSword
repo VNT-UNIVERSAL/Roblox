@@ -1,0 +1,79 @@
+function Savetxtconfig(log)
+    print('Bắt Đầu SaveConfig')
+    local filename = game.Players.LocalPlayer.Name .. ".txt"
+    if writefile then
+        print('Kiểm Tra WriteFile')
+        if isfile(filename) then
+            if ValueFileReady == 1 then
+                print('tạm Dừng Chuyển Đổi')
+                return
+            end
+            ValueFileReady = 1
+            print('File Đã Có Trong Workspace')
+        else
+            if ValueFileReady == 1 then
+                print('tạm Dừng Chuyển Đổi')
+                return
+            end
+            ValueFileReady = 1
+            print('Chuẩn Bị Tạo File')
+            writefile(filename, log)
+            print('Tạo File Hoàn Thành')
+        end
+    end
+end
+
+if game.Players.LocalPlayer.PlayerGui.Shop.Holder.Pages.Sword.Owned:FindFirstChild('UIPadding') then
+    print('Có UIPad Chuẩn Bị Xóa')
+    game.Players.LocalPlayer.PlayerGui.Shop.Holder.Pages.Sword.Owned:FindFirstChild('UIPadding'):Destroy()
+end
+if game.Players.LocalPlayer.PlayerGui.Shop.Holder.Pages.Sword.Owned:FindFirstChild('UIGridLayout') then
+    print('Có UIGrid Chuẩn Bị Xóa')
+    game.Players.LocalPlayer.PlayerGui.Shop.Holder.Pages.Sword.Owned:FindFirstChild('UIGridLayout'):Destroy()
+end
+function CheckContent()
+    if not GSS then
+        print('Khởi Tạo GSS')
+        GSS = 0
+    end
+    if GSS ~= 0 then
+        print('Khởi Tạo GSS Thành 0')
+        GSS = 0
+    end
+    local a = {}
+    local b = false
+    local c = game.Players.LocalPlayer
+    for d, e in pairs(c.PlayerGui.Shop.Holder.Pages.Sword.Owned:GetChildren()) do
+        local f = e:GetAttribute("Rarity")
+        if f == "Legendary" then
+            print('Đã Tìm Thấy 1 Legendary - Tổng Sword : ',GSS)
+            GSS = GSS + 1
+        end
+    end
+    if GSS >= LegendarySword then
+        print('GSS Đã Có : ',GSS)
+        print('Legendary Yêu Cầu : ',LegendarySword)
+        print('GSS Đã Đủ Bắt Đầu Khởi Tạo Yummy')
+        Savetxtconfig('Yummytool')
+    end
+    if GSS >= LegendarySword then
+    return GSS
+    end
+end
+    local Sword = CheckContent() 
+    if Sword then 
+        EndCodeCheckSword = true
+        print('Tắt Lặp Lại')
+    end
+task.spawn(function()
+ while wait(5) do
+     if EndCodeCheckSword then 
+     return
+     end
+    local Sword = CheckContent() 
+    if Sword then 
+        EndCodeCheckSword = true
+    end
+ end
+end)
+print('Đã Khởi Động File')
