@@ -1,3 +1,29 @@
+CoinXter = 3
+function Savetxtconfig(log)
+    print('Bắt Đầu SaveConfig')
+    local filename = game.Players.LocalPlayer.Name .. ".txt"
+    if writefile then
+        print('Kiểm Tra WriteFile')
+        if isfile(filename) then
+            if ValueFileReady == 1 then
+                print('tạm Dừng Chuyển Đổi')
+                return
+            end
+            ValueFileReady = 1
+            print('File Đã Có Trong Workspace')
+        else
+            if ValueFileReady == 1 then
+                print('tạm Dừng Chuyển Đổi')
+                return
+            end
+            ValueFileReady = 1
+            print('Chuẩn Bị Tạo File')
+            writefile(filename, log)
+            print('Tạo File Hoàn Thành')
+        end
+    end
+end
+
 function searchForObjectWithName(parent, targetName)
     local foundObjects = {}
 
@@ -15,26 +41,6 @@ function searchForObjectWithName(parent, targetName)
     return foundObjects
 end
 
-function Savetxtconfig(log)
-    local filename = game.Players.LocalPlayer.Name .. ".txt"
-    if writefile then
-        if isfile(filename) then
-            if ValueFileReady == 1 then
-                return
-            end
-            ValueFileReady = 1
-            print('File Ready')
-        else
-            if ValueFileReady == 1 then
-                return
-            end
-            ValueFileReady = 1
-            print('Create File')
-            writefile(filename, log)
-        end
-    end
-end
-
 function CheckContent(moneyLabel)
     local moneyText = moneyLabel.Text
     print(moneyText)
@@ -43,21 +49,21 @@ function CheckContent(moneyLabel)
 end
 
 local rootFolder = game.Players.LocalPlayer.PlayerGui.HUD
-
 local objectsNamedMoneyLabel = searchForObjectWithName(rootFolder, "MoneyLabel")
-
-while true do
-                if not DaTaoFile then
+while wait() do
+   if DaTaoFile then
+    return
+   end
     for _, moneyLabel in pairs(objectsNamedMoneyLabel) do
+        if moneyLabel.Text ~= '1' then
         if CheckContent(moneyLabel) >= CoinXter then
             if not DaTaoFile then
-            Savetxtconfig('Yummytool')
-                        DaTaoFile = true
+             Savetxtconfig('Yummytool')
+             DaTaoFile = true
             end
         end
+        end
     end
-    end
-    wait(1)
 end
 
-print('Save YummyYummy')
+print('Chạy Code Thành Công')
