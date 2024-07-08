@@ -1,4 +1,3 @@
-CoinXter = 3
 function Savetxtconfig(log)
     print('Bắt Đầu SaveConfig')
     local filename = game.Players.LocalPlayer.Name .. ".txt"
