@@ -42,8 +42,13 @@ end
 
 function CheckContent(moneyLabel)
     local moneyText = moneyLabel.Text
-    print(moneyText)
+    moneyText = moneyText:gsub("[%,.%$]", "")
     local money = tonumber(moneyText)
+    if money == nil then
+        print("Error: Money text is not numeric after cleaning: " .. moneyLabel.Text)
+        return 0
+    end
+
     return money
 end
 
