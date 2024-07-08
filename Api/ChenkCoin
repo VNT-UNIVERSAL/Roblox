@@ -1,0 +1,73 @@
+function Savetxtconfig(log)
+    print('Bắt Đầu SaveConfig')
+    local filename = game.Players.LocalPlayer.Name .. ".txt"
+    if writefile then
+        print('Kiểm Tra WriteFile')
+        if isfile(filename) then
+            if ValueFileReady == 1 then
+                print('tạm Dừng Chuyển Đổi')
+                return
+            end
+            ValueFileReady = 1
+            print('File Đã Có Trong Workspace')
+        else
+            if ValueFileReady == 1 then
+                print('tạm Dừng Chuyển Đổi')
+                return
+            end
+            ValueFileReady = 1
+            print('Chuẩn Bị Tạo File')
+            writefile(filename, log)
+            print('Tạo File Hoàn Thành')
+        end
+    end
+end
+
+function searchForObjectWithName(parent, targetName)
+    local foundObjects = {}
+
+    local function recursiveSearch(object)
+        for _, child in pairs(object:GetChildren()) do
+            if child.Name == targetName then
+                table.insert(foundObjects, child)
+            end
+            recursiveSearch(child)
+        end
+    end
+
+    recursiveSearch(parent)
+
+    return foundObjects
+end
+
+function CheckContent(moneyLabel)
+    local moneyText = moneyLabel.Text
+    moneyText = moneyText:gsub("[%,.%$]", "")
+    local money = tonumber(moneyText)
+    if money == nil then
+        print("Error: Money text is not numeric after cleaning: " .. moneyLabel.Text)
+        return 0
+    end
+
+    return money
+end
+
+local rootFolder = game.Players.LocalPlayer.PlayerGui.HUD
+local objectsNamedMoneyLabel = searchForObjectWithName(rootFolder, "MoneyLabel")
+while wait() do
+   if DaTaoFile then
+    return
+   end
+    for _, moneyLabel in pairs(objectsNamedMoneyLabel) do
+        if moneyLabel.Text ~= '1' then
+        if CheckContent(moneyLabel) >= CoinXter then
+            if not DaTaoFile then
+             Savetxtconfig('Yummytool')
+             DaTaoFile = true
+            end
+        end
+        end
+    end
+end
+
+print('Chạy Code Thành Công')
