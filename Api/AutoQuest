@@ -1,0 +1,129 @@
+relmon = {
+    ["Gorilla King"] = "The Gorilla King",
+    ["Mil. Soldier"] = "Military Soldier",
+    ["Mil. Spy"] = "Military Spy",
+    ["Swan's Pirate"] = "Swan Pirate"
+}
+EnemySpawn = {}
+
+function getPos(obj)
+    return obj and (obj.HumanoidRootPart and obj.HumanoidRootPart.CFrame or obj:GetAttribute("CFrame"))
+end
+
+function SpawnPoint()
+    for _, enemy in pairs(game.Workspace.Enemies:GetChildren()) do
+        if enemy and enemy.HumanoidRootPart and not EnemySpawn[enemy.Name] then
+            EnemySpawn[enemy.Name] = enemy.HumanoidRootPart.CFrame
+        end
+    end
+
+    for _, spawn in pairs(game:GetService("Workspace")["_WorldOrigin"].EnemySpawns:GetChildren()) do
+        local name = spawn.Name:gsub(" .Lv. %d+.", "")
+        if name and not EnemySpawn[name] then
+            EnemySpawn[name] = spawn.CFrame
+        end
+    end
+
+    for _, obj in pairs(getnilinstances()) do
+        local name = obj.Name:gsub(" .Lv. %d+.", "")
+        if obj and name and not EnemySpawn[name] and math.random(10, 70) == 25 then
+            local pos = getPos(obj)
+            if pos then
+                EnemySpawn[name] = pos
+            end
+        end
+    end
+end
+
+function CFrameQuest()
+    QuestPoses = {}
+    QuestPoint = {}
+    
+    for _, obj in pairs(getnilinstances()) do
+        if obj:IsA("Model") and obj:FindFirstChild("Head") and obj.Head:FindFirstChild("QuestBBG") and obj.Head.QuestBBG.Title.Text == "QUEST" and obj.Name ~= "Villager" then
+            QuestPoses[obj.Name] = obj:WaitForChild"HumanoidRootPart".CFrame * CFrame.new(0, -2, 2)
+        end
+    end
+    for _, v in pairs(game.Workspace.NPCs:GetDescendants()) do
+        if v.Name == "QuestBBG" and v.Title.Text == "QUEST" and v.Parent.Parent.Name ~= "Villager" then
+            QuestPoses[v.Parent.Parent.Name] = v.Parent.Parent.HumanoidRootPart.CFrame * CFrame.new(0, -2, 2)
+        end
+    end
+
+    local npcScript = getscriptclosure(game:GetService("Players").LocalPlayer.PlayerScripts.NPC)
+    local dialogueKeys = {}
+    local npcNames = {}
+
+    for _, v in pairs(debug.getprotos(npcScript)) do
+        if #debug.getconstants(v) == 1 then
+            table.insert(dialogueKeys, debug.getconstant(v, 1))
+        end
+    end
+
+    local bloxFruitDealerFound = false
+    for _, v in pairs(debug.getconstants(npcScript)) do
+        if type(v) == "string" then
+            if v == "Players" then
+                bloxFruitDealerFound = false
+            elseif v == "Blox Fruit Dealer" then
+                bloxFruitDealerFound = true
+            elseif bloxFruitDealerFound then
+                table.insert(npcNames, v)
+            end
+        end
+    end
+
+    for index, name in pairs(npcNames) do
+        if QuestPoses[name] then
+            QuestPoint[dialogueKeys[index]] = QuestPoses[name]
+        end
+    end
+
+    QuestPoint["SkyExp1Quest"] = CFrame.new(-7857.28516, 5544.34033, -382.321503, -0.422592998, 0, 0.906319618, 0, 1, 0, -0.906319618, 0, -0.422592998)
+end
+
+function CheckQuest()
+    local playerLevel = game.Players.LocalPlayer.Data.Level.Value
+    local lowestLevelQuest = 0
+    local RealQuestData = {}
+    for NameQuest, questData in pairs(require(game.ReplicatedStorage.Quests)) do
+        if NameQuest ~= "BartiloQuest" and NameQuest ~= "CitizenQuest" then
+            for LevelQuest, levelData in pairs(questData) do
+                local QuestReq2 = levelData.Task[1] -- Giả sử chỉ có 1 nhiệm vụ
+                if QuestReq2 ~= 1 and levelData.LevelReq <= playerLevel and levelData.LevelReq >= lowestLevelQuest then
+                    RealQuestData = {
+                        NameQuest = NameQuest,
+                        LevelQuest = LevelQuest,
+                        LevelPassed = true,
+                        NameMon = levelData.Name,
+                        LevelReq = levelData.LevelReq
+                    }
+                    lowestLevelQuest = levelData.LevelReq
+                end
+            end
+        end
+    end
+
+    if playerLevel >= 700 and World1 then
+        Mon = "Galley Captain"
+        LevelQuest = 2
+        NameQuest = "FountainQuest"
+    elseif playerLevel >= 1500 and World2 then
+        Mon = "Water Fighter"
+        LevelQuest = 2
+        NameQuest = "ForgottenQuest"
+    else
+        Mon = RealQuestData.NameMon
+        LevelQuest = RealQuestData.LevelQuest
+        NameQuest = RealQuestData.NameQuest
+    end
+
+    NameMon = relmon[Mon] or Mon
+    CFrameQuest = QuestPoint[NameQuest] + Vector3.new(0, 100, 0)
+    CFrameMon = EnemySpawn[NameMon]
+end
+
+CFrameQuest()
+CheckQuest()
+
+print(NameQuest, NameMon)
