@@ -1506,7 +1506,8 @@ function lib:Window(text, preset, closebind)
             LabelTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
             LabelTitle.TextSize = 14.000
             LabelTitle.TextXAlignment = Enum.TextXAlignment.Left
-
+			LabelTitle.Size = UDim2.new(1, -24, 0, LabelTitle.Content.TextBounds.Y)
+			Label.Size = UDim2.new(1, 0, 0, LabelTitle.Content.TextBounds.Y + 5)
             Tab.CanvasSize = UDim2.new(0, 0, 0, TabLayout.AbsoluteContentSize.Y)
         end
         function tabcontent:Textbox(text, disapper, callback)
