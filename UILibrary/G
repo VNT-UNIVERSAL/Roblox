@@ -449,6 +449,7 @@ function lib:Window(text, preset, closebind)
             Button.Text = ""
             Button.TextColor3 = Color3.fromRGB(0, 0, 0)
             Button.TextSize = 14.000
+            Button.BackgroundTransparency = 0.6
 
             ButtonCorner.CornerRadius = UDim.new(0, 5)
             ButtonCorner.Name = "ButtonCorner"
@@ -519,7 +520,7 @@ function lib:Window(text, preset, closebind)
             Toggle.Text = ""
             Toggle.TextColor3 = Color3.fromRGB(0, 0, 0)
             Toggle.TextSize = 14.000
-
+            Toggle.BackgroundTransparency = 0.6
             ToggleCorner.CornerRadius = UDim.new(0, 5)
             ToggleCorner.Name = "ToggleCorner"
             ToggleCorner.Parent = Toggle
@@ -712,7 +713,7 @@ function lib:Window(text, preset, closebind)
             Slider.Text = ""
             Slider.TextColor3 = Color3.fromRGB(0, 0, 0)
             Slider.TextSize = 14.000
-
+           Slider.BackgroundTransparency = 0.6
             SliderCorner.CornerRadius = UDim.new(0, 5)
             SliderCorner.Name = "SliderCorner"
             SliderCorner.Parent = Slider
@@ -820,7 +821,7 @@ function lib:Window(text, preset, closebind)
             local droptog = false
             local framesize = 0
             local itemcount = 0
-
+            
             local Dropdown = Instance.new("Frame")
             local DropdownCorner = Instance.new("UICorner")
             local DropdownBtn = Instance.new("TextButton")
@@ -835,7 +836,7 @@ function lib:Window(text, preset, closebind)
             Dropdown.ClipsDescendants = true
             Dropdown.Position = UDim2.new(-0.541071415, 0, -0.532915354, 0)
             Dropdown.Size = UDim2.new(0, 363, 0, 42)
-
+             Dropdown.BackgroundTransparency = 0.6
             DropdownCorner.CornerRadius = UDim.new(0, 5)
             DropdownCorner.Name = "DropdownCorner"
             DropdownCorner.Parent = Dropdown
@@ -1523,7 +1524,7 @@ function lib:Window(text, preset, closebind)
             Textbox.ClipsDescendants = true
             Textbox.Position = UDim2.new(-0.541071415, 0, -0.532915354, 0)
             Textbox.Size = UDim2.new(0, 363, 0, 42)
-
+           Textbox.BackgroundTransparency = 0.6
             TextboxCorner.CornerRadius = UDim.new(0, 5)
             TextboxCorner.Name = "TextboxCorner"
             TextboxCorner.Parent = Textbox
