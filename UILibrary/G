@@ -6,10 +6,19 @@ local LocalPlayer = game:GetService("Players").LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local PresetColor = Color3.fromRGB(44, 120, 224)
 local CloseBind = Enum.KeyCode.RightControl
-
+for i,v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
+if v.Name == DragUI then
+v:Destroy()
+end
+end
+for i,v in pairs(game.CoreGui:GetChildren()) do
+if v.Name == DragUI then
+v:Destroy()
+end
+end
 local ui = Instance.new("ScreenGui")
-ui.Name = "ui"
-ui.Parent = game.Players.LocalPlayer.PlayerGui
+ui.Name = "DragUI"
+ui.Parent = game.CoreGui or game.Players.LocalPlayer.PlayerGui
 ui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 coroutine.wrap(
