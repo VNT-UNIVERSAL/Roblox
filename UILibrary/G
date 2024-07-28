@@ -1766,3 +1766,4 @@ ImageButton.MouseButton1Down:connect(function()
     game:GetService("VirtualInputManager"):SendKeyEvent(false,Enum.KeyCode.RightControl,true,game)
 end)
 UICorner.Parent = ImageButton
+return lib
