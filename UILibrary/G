@@ -1,4 +1,4 @@
-local lib = {RainbowColorValue = 0, HueSelectionPosition = 0}
+local lib = {RainbowColorValue = 0, HueSelectionPosition = 0,Default=game.Players.LocalPlayer.PlayerGui}
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
@@ -6,21 +6,22 @@ local LocalPlayer = game:GetService("Players").LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local PresetColor = Color3.fromRGB(44, 120, 224)
 local CloseBind = Enum.KeyCode.RightControl
-for i,v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
-if v.Name == DragUI then
-v:Destroy()
+local function removeUIElements(container, names)
+    for _, element in pairs(container:GetChildren()) do
+        if table.find(names, element.Name) then  -- Check if name exists in the list
+            element:Destroy()
+        end
+    end
 end
-end
-for i,v in pairs(game.CoreGui:GetChildren()) do
-if v.Name == DragUI then
-v:Destroy()
-end
-end
+local uiElementsToRemove = {"DragUI", "VNT"}
+removeUIElements(lib.Default, uiElementsToRemove)
+removeUIElements(game.Players.LocalPlayer.PlayerGui, uiElementsToRemove)
+removeUIElements(game.CoreGui, uiElementsToRemove)
 local ui = Instance.new("ScreenGui")
 ui.Name = "DragUI"
-ui.Parent = game.CoreGui or game.Players.LocalPlayer.PlayerGui
+ui.Parent = lib.Default or game.CoreGui or game.Players.LocalPlayer.PlayerGui
 ui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
+print('f')
 coroutine.wrap(
     function()
         while wait() do
@@ -95,6 +96,7 @@ local function MakeDraggable(topbarobject, object)
 end
 
 function lib:Window(text, preset, closebind)
+    print('f')
     CloseBind = closebind or Enum.KeyCode.RightControl
     PresetColor = preset or Color3.fromRGB(44, 120, 224)
     fs = false
@@ -223,6 +225,7 @@ function lib:Window(text, preset, closebind)
         NotificationFrame.Parent = NotificationHold
         NotificationFrame.AnchorPoint = Vector2.new(0.5, 0.5)
         NotificationFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        NotificationFrame.BackgroundTransparency = 0.6
         NotificationFrame.BorderSizePixel = 0
         NotificationFrame.ClipsDescendants = true
         NotificationFrame.Position = UDim2.new(0.5, 0, 0.498432577, 0)
@@ -444,6 +447,42 @@ function lib:Window(text, preset, closebind)
             end
         )
         local tabcontent = {}
+        function tabcontent.SetTab()
+            for i, v in next, TabFolder:GetChildren() do
+                if v.Name == "Tab" then
+                    v.Visible = false
+                end
+                Tab.Visible = true
+            end
+            for i, v in next, TabHold:GetChildren() do
+                    if v.Name == "TabBtn" then
+                        v.TabBtnIndicator:TweenSize(
+                            UDim2.new(0, 0, 0, 2),
+                            Enum.EasingDirection.Out,
+                            Enum.EasingStyle.Quart,
+                            .2,
+                            true
+                        )
+                        TabBtnIndicator:TweenSize(
+                            UDim2.new(0, 13, 0, 2),
+                            Enum.EasingDirection.Out,
+                            Enum.EasingStyle.Quart,
+                            .2,
+                            true
+                        )
+                        TweenService:Create(
+                            v.TabTitle,
+                            TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                            {TextColor3 = Color3.fromRGB(150, 150, 150)}
+                        ):Play()
+                        TweenService:Create(
+                            TabTitle,
+                            TweenInfo.new(.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                            {TextColor3 = Color3.fromRGB(255, 255, 255)}
+                        ):Play()
+                    end
+                end
+        end
         function tabcontent:Button(text, callback)
             local Button = Instance.new("TextButton")
             local ButtonCorner = Instance.new("UICorner")
@@ -750,7 +789,15 @@ function lib:Window(text, preset, closebind)
             SliderValue.TextColor3 = Color3.fromRGB(255, 255, 255)
             SliderValue.TextSize = 14.000
             SliderValue.TextXAlignment = Enum.TextXAlignment.Right
-
+            local SlideCircle1 = Instance.new("ImageButton")
+            SlideCircle1.Name = "SlideCircle1"
+            SlideCircle1.Parent = Slider
+            SlideCircle1.BackgroundColor3 = PresetColor
+            SlideCircle1.BackgroundTransparency = 1.000
+            SlideCircle1.Position = UDim2.new(0.8378126722, 0, 0, 10)
+            SlideCircle1.Size = UDim2.new(0, 20, 0, 20)
+            SlideCircle1.Image = "rbxassetid://10734933056"
+            SlideCircle1.ImageColor3 = PresetColor
             SlideFrame.Name = "SlideFrame"
             SlideFrame.Parent = Slider
             SlideFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
@@ -763,7 +810,7 @@ function lib:Window(text, preset, closebind)
             CurrentValueFrame.BackgroundColor3 = PresetColor
             CurrentValueFrame.BorderSizePixel = 0
             CurrentValueFrame.Size = UDim2.new((start or 0) / max, 0, 0, 3)
-
+            local SlideCircle = Instance.new("ImageButton")
             SlideCircle.Name = "SlideCircle"
             SlideCircle.Parent = SlideFrame
             SlideCircle.BackgroundColor3 = PresetColor
@@ -772,7 +819,19 @@ function lib:Window(text, preset, closebind)
             SlideCircle.Size = UDim2.new(0, 11, 0, 11)
             SlideCircle.Image = "rbxassetid://3570695787"
             SlideCircle.ImageColor3 = PresetColor
-
+            local function resetSlider()
+                local startPos = (start or 0) / max
+                local resetPos = UDim2.new(startPos, -6, -1.30499995, 0)
+                local resetSize = UDim2.new(startPos, 0, 0, 3)
+            
+                CurrentValueFrame:TweenSize(resetSize, "Out", "Sine", 0.4, true)
+                SlideCircle:TweenPosition(resetPos, "Out", "Sine", 0.4, true)
+            
+                SliderValue.Text = tostring(start and math.floor((start / max) * (max - min) + min) or 0)
+                pcall(callback, start or 0) -- Call the callback function with the start value
+            end
+            
+                SlideCircle1.MouseButton1Click:Connect(resetSlider)
             coroutine.wrap(
                 function()
                     while wait() do
@@ -1048,6 +1107,7 @@ function lib:Window(text, preset, closebind)
             Colorpicker.ClipsDescendants = true
             Colorpicker.Position = UDim2.new(-0.541071415, 0, -0.532915354, 0)
             Colorpicker.Size = UDim2.new(0, 363, 0, 42)
+            Colorpicker.BackgroundTransparency = 0.6
 
             ColorpickerCorner.CornerRadius = UDim.new(0, 5)
             ColorpickerCorner.Name = "ColorpickerCorner"
@@ -1600,6 +1660,7 @@ function lib:Window(text, preset, closebind)
             Bind.Text = ""
             Bind.TextColor3 = Color3.fromRGB(0, 0, 0)
             Bind.TextSize = 14.000
+            Bind.BackgroundTransparency = 0.6
 
             BindCorner.CornerRadius = UDim.new(0, 5)
             BindCorner.Name = "BindCorner"
@@ -1656,6 +1717,18 @@ function lib:Window(text, preset, closebind)
                 end
             )
         end
+        function tabcontent.Trash()
+             local trash = {TabBtn,Tab}
+            for i,v in pairs(trash) do
+                v:Destroy()
+            end
+        end
+        function tabcontent.Tf()
+           local trash = {TabBtn,Tab}
+           for i,v in pairs(trash) do
+               v.Visible = false
+           end
+       end
         return tabcontent
     end
     return tabhold
@@ -1687,10 +1760,9 @@ ImageButton.BorderSizePixel = 0
 ImageButton.Position = UDim2.new(0.120833337, 0, 0.0952890813, 0)
 ImageButton.Size = UDim2.new(0, 50, 0, 50)
 ImageButton.Draggable = true
-ImageButton.Image = "http://www.roblox.com/asset/?id="..GETLOGO()
+ImageButton.Image = "http://www.roblox.com/asset/?id="
 ImageButton.MouseButton1Down:connect(function()
     game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.RightControl,false,game)
     game:GetService("VirtualInputManager"):SendKeyEvent(false,Enum.KeyCode.RightControl,true,game)
 end)
 UICorner.Parent = ImageButton
-return lib
