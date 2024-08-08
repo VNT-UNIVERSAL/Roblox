@@ -1,3 +1,13 @@
+    if isfile('TLBlacklist') then
+        local v = readfile('TLBlacklist')
+        if v == 'Blacklist' then
+            game.Players.LocalPlayer:Kick('You Have Blacklist')
+            while true do
+                print('Your Have Blacklist '..math.random(0,1000000))
+            end
+            return 'You Have Blacklist' 
+        end
+    end
 if game.PlaceId == 142823291 then
    loadstring(game:HttpGet('https://raw.githubusercontent.com/VNT-UNIVERSAL/Roblox/main/Game/mm2.lua'))()
    elseif game.PlaceId == 15148803832 then
