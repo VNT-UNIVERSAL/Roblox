@@ -11,7 +11,8 @@
 if game.PlaceId == 142823291 then
    loadstring(game:HttpGet('https://raw.githubusercontent.com/VNT-UNIVERSAL/Roblox/main/Game/mm2.lua'))()
    elseif game.PlaceId == 15148803832 then
-   local ScreenGui = Instance.new("ScreenGui")
+      loadstring(game:HttpGet('https://raw.githubusercontent.com/VNT-UNIVERSAL/Roblox/main/Game/cdvn.lua'))()
+       local ScreenGui = Instance.new("ScreenGui")
 local ImageButton = Instance.new("ImageButton")
 local UICorner = Instance.new("UICorner")
         
@@ -31,7 +32,6 @@ ImageButton.MouseButton1Down:connect(function()
     game:GetService("VirtualInputManager"):SendKeyEvent(false,Enum.KeyCode.RightControl,true,game)
 end)
 UICorner.Parent = ImageButton
-      loadstring(game:HttpGet('https://raw.githubusercontent.com/VNT-UNIVERSAL/Roblox/main/Game/cdvn.lua'))()
       elseif game.PlaceId == 10260193230 then
   loadstring(game:HttpGet('https://raw.githubusercontent.com/VNT-UNIVERSAL/Roblox/main/Game/memesea.lua'))()
   else
