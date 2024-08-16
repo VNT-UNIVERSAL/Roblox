@@ -11,7 +11,7 @@
 if game.PlaceId == 142823291 then
    loadstring(game:HttpGet('https://raw.githubusercontent.com/VNT-UNIVERSAL/Roblox/main/Game/mm2.lua'))()
    elseif game.PlaceId == 15148803832 then
-    if VNTScript == 'Misc then
+    if VNTScript == 'Misc' then
         loadstring(game:HttpGet('ttps://raw.githubusercontent.com/VNT-UNIVERSAL/Roblox/main/Game/cdvnmisc.lua'))()
     else
       loadstring(game:HttpGet('https://raw.githubusercontent.com/VNT-UNIVERSAL/Roblox/main/Game/cdvn.lua'))()
