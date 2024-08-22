@@ -38,6 +38,8 @@ end)
 UICorner.Parent = ImageButton
       elseif game.PlaceId == 10260193230 then
   loadstring(game:HttpGet('https://raw.githubusercontent.com/VNT-UNIVERSAL/Roblox/main/Game/memesea.lua'))()
+          elseif game.PlaceId == 394506555 then
+  loadstring(game:HttpGet('https://raw.githubusercontent.com/VNT-UNIVERSAL/Roblox/main/Game/GluePiece.lua'))()
   else
     game.Players.LocalPlayer:Kick('Game Not Supported')
 end
